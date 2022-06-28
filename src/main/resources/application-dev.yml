@@ -1,0 +1,31 @@
+spring:
+  r2dbc:
+    url: jdbc:postgresql://localhost:5432/jvs_data
+    username: postgres
+    password: postgres
+    pool:
+      max-size: 20
+      initial-size: 10
+      enabled: true
+    name: jvs_data
+    host: localhost
+    port: 5432
+  redis:
+    host: localhost
+    database: 0
+    password: redis
+    jedis:
+      pool:
+        enabled: true
+#  datasource:
+#    username: postgres
+#    password: postgres
+#    url: jdbc:postgresql://localhost:5432/jvs_data
+#    hikari:
+#      driver-class-name: org.postgresql.Driver
+#      schema: public
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+server:
+  port: 8083
