@@ -34,7 +34,9 @@ public class Transaction extends ApiAbstract {
             "returning id,description ,nominal ,tanggal ,nasabah_id ,posisi ,ins_on ,ins_by ,mod_on ,mod_by ";
     @PostExecution
     public Mono<JSONObject> tabung(){
-
+        if(reqData.getDouble("nominal")<=0){
+            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+        }
         return paramUtils.getMapParam().zipWith(dbUtils.executeQuery("select * from nasabah",new ArrayList<>()))
                 .flatMap(tuple->{
                     if (tuple.getT2()==null){
@@ -77,6 +79,9 @@ public class Transaction extends ApiAbstract {
     @PostExecution
     public Mono<JSONObject> pinjam(){
         //cek saldo
+        if(reqData.getDouble("nominal")<=0){
+            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+        }
         String saldoKomunitas="select coalesce ((select sum(nominal) from \"transaction\" t where t.posisi ='K') - (select sum(nominal) from \"transaction\" t where t.posisi !='K'),0) as saldo";
         return paramUtils.getMapParam()
                 .zipWith(dbUtils.executeQuery(saldoKomunitas,new ArrayList<>()))
@@ -115,6 +120,9 @@ public class Transaction extends ApiAbstract {
     @PostExecution
     public Mono<JSONObject> pengembalian(){
         //cek pinjaman
+        if(reqData.getDouble("nominal")<=0){
+            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+        }
         //jika tidak memiliki pinjaman throw error
         String pinjaman="select n.id,n.first_name ,n.last_name ,(coalesce (pinjam.total,0) - coalesce (kembali.total,0)) as sisa_pinjaman from nasabah n " +
                 "left join (select sum(nominal) as total, nasabah_id from \"transaction\" where posisi='P' group by nasabah_id) pinjam on n.id =pinjam.nasabah_id " +
@@ -157,6 +165,9 @@ public class Transaction extends ApiAbstract {
                 });
     }
     public Mono<JSONObject> pengambilanSaldo(){
+        if(reqData.getDouble("nominal")<=0){
+            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+        }
         return paramUtils.getMapParam()
                 .flatMap(p->{
                     List<SqlParam> params=new ArrayList<>();
@@ -197,6 +208,9 @@ public class Transaction extends ApiAbstract {
     }
     @PostExecution
     public Mono<JSONObject> getTransactionByDate(){
+        if(reqData.getDouble("nominal")<=0){
+            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+        }
         if (LocalDate.parse(req.getString("awal")).isAfter(LocalDate.now()) || LocalDate.parse(req.getString("akhir")).isAfter(LocalDate.now())){
             return Mono.error(new DateIsAfterToDayException());
         }
@@ -224,6 +238,9 @@ public class Transaction extends ApiAbstract {
     }
     @PostExecution
     public Mono<JSONObject> getTransactionByNasabah(){
+        if(reqData.getDouble("nominal")<=0){
+            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+        }
         List<SqlParam> params=new ArrayList<>();
         params.add(new SqlParam("nasabahId",reqData.getString("nasabahId")));
         return dbUtils.executeQuery(sqlNasabah,params)
