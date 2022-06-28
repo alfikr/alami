@@ -1,0 +1,167 @@
+{
+	"variables": [],
+	"info": {
+		"name": "alami",
+		"_postman_id": "906f3e23-b1d5-78b0-75fa-3d85fd6f0057",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"request": {
+				"url": "http://localhost:8083/api/auth",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"login\":\"admin\",\n\"password\":\"admin\",\n\"rememberMe\":false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Nasabah",
+			"request": {
+				"url": {
+					"raw": "localhost:8083/api/request?method=apiNasabah.getNasabah",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"request"
+					],
+					"query": [
+						{
+							"key": "method",
+							"value": "apiNasabah.getNasabah",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTY1NjY1MzU2MX0.Gg-_Se1QBjslf5QYy2fJZERohmy43yWAYBmr12mUazQtY9sTkw-cPce22nqAy2KGJbeVan_JAYiscoqtuYaDwA",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "create nasabah",
+			"request": {
+				"url": "localhost:8083/api/request",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTY1NjU4ODEyOH0.8barYrSoQh230Vhxjq32A6bZS44QeBG6ilyUN-QF36_BfKrdvBkfOzOFcq8Pyp4Iw91TJK24cShsyK5-Tpxt0A",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"method\":\"apiNasabah.createNasabah\",\n\"data\":{\n\t\"firstName\":\"Test 3\",\n\t\"lastName\":\"Test aja\",\n\t\"tanggalLahir\":\"2012-08-10\",\n\t\"alamat\":\"Hello alamat\"\n}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "tabungan",
+			"request": {
+				"url": "localhost:8083/api/request",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTY1NjY1MzU2MX0.Gg-_Se1QBjslf5QYy2fJZERohmy43yWAYBmr12mUazQtY9sTkw-cPce22nqAy2KGJbeVan_JAYiscoqtuYaDwA",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"method\":\"apiTransaction.tabung\",\n\t\"data\":{\n\t\t\"nominal\":100000,\n\t\t\"nasabahId\":\"d36b5821-9283-4a88-9dce-fa31a4f9a245\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get nasabah transaction",
+			"request": {
+				"url": "localhost:8083/api/request",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTY1NjY1MzU2MX0.Gg-_Se1QBjslf5QYy2fJZERohmy43yWAYBmr12mUazQtY9sTkw-cPce22nqAy2KGJbeVan_JAYiscoqtuYaDwA",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"method\":\"apiTransaction.getTransactionByNasabah\",\n\t\"data\":{\n\t\t\"nasabahId\":\"d36b5821-9283-4a88-9dce-fa31a4f9a245\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "transaction by date",
+			"request": {
+				"url": "localhost:8083/api/request",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTY1NjY1MzU2MX0.Gg-_Se1QBjslf5QYy2fJZERohmy43yWAYBmr12mUazQtY9sTkw-cPce22nqAy2KGJbeVan_JAYiscoqtuYaDwA",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"method\":\"apiTransaction.getTransactionByDate\",\n\t\"data\":{\n\t\t\"awal\":\"2022-06-01\",\n\t\t\"akhir\":\"2022-07-01\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
