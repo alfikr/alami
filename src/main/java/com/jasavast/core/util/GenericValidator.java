@@ -1,6 +1,7 @@
 package com.jasavast.core.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,6 +11,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Arrays;
 import java.util.Set;
 
 @Component
@@ -46,5 +48,16 @@ public class GenericValidator implements org.springframework.validation.Validato
     @Override
     public void validateValue(Class<?> targetType, String fieldName, Object value, Errors errors, Object... validationHints) {
         SmartValidator.super.validateValue(targetType, fieldName, value, errors, validationHints);
+    }
+    public JSONObject validationKey(JSONObject object, String... param){
+        JSONObject result = new JSONObject();
+        Arrays.stream(param)
+                .forEach(s -> {
+                    if (!object.has(s)){
+                        result.put(s,s+" tidak boleh kosong");
+                    }
+                });
+        log.info("result {}",result);
+        return result;
     }
 }

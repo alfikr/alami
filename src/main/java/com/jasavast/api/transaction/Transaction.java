@@ -6,6 +6,7 @@ import com.jasavast.core.annotation.PostExecution;
 import com.jasavast.core.annotation.PutExecution;
 import com.jasavast.core.error.*;
 import com.jasavast.core.util.DBUtils;
+import com.jasavast.core.util.GenericValidator;
 import com.jasavast.core.util.SqlParam;
 import com.jasavast.service.ApiAbstract;
 import org.json.JSONObject;
@@ -25,15 +26,21 @@ import java.util.Optional;
 public class Transaction extends ApiAbstract {
     @Autowired
     private ParamUtils paramUtils;
+    @Autowired
+    private GenericValidator genericValidator;
     public Transaction(DBUtils dbUtils) {
         super(dbUtils);
     }
     private final static  String sqlNasabah="select * from nasabah n where n.id =:nasabahId";
-    String sqlTransaction="insert into \"transaction\" (description,nominal,tanggal,posisi,nasabah_id,ins_by,mod_by) " +
-            "values (:description,:nominal, :tanggal, 'K', :nasabahId,:insBy,:modBy) " +
+    String sqlTransaction="insert into \"transaction\" (description,nominal,tanggal,posisi,nasabah_id,ins_by,ins_on,mod_by,mod_on) " +
+            "values (:description,:nominal, :tanggal, 'K', :nasabahId,:insBy,:insOn,:modBy,:modOn) " +
             "returning id,description ,nominal ,tanggal ,nasabah_id ,posisi ,ins_on ,ins_by ,mod_on ,mod_by ";
     @PostExecution
     public Mono<JSONObject> tabung(){
+        JSONObject validation = genericValidator.validationKey(reqData,"nominal","nasabahId");
+        if (validation.length()>0){
+            throw new InvalidParameterException(validation.toString());
+        }
         if(reqData.getDouble("nominal")<=0){
             return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
         }
