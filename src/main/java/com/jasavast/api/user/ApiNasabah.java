@@ -60,7 +60,7 @@ public class ApiNasabah extends ApiAbstract {
     }
 //
     @PostExecution
-    public Mono<Map> createNasabah(){
+    public Mono<JSONObject> createNasabah(){
         NasabahVM vm = objectMapper.convertValue(reqData,NasabahVM.class);
         BindingResult errors = new BeanPropertyBindingResult(vm,"NasabahVM");
         validator.validate(vm,errors);
@@ -70,6 +70,7 @@ public class ApiNasabah extends ApiAbstract {
         if (reqData.getString("firstName").length()<3){
             return Mono.error(new InvalidParameterException("firstName"));
         }
+        log.info("validasi selesai");
         return paramUtils.getMapParam()
                 .map(param->{
                     if (param==null){
@@ -99,7 +100,7 @@ public class ApiNasabah extends ApiAbstract {
                 })
                 .map(user->{
                     log.info("insert success {}",user);
-                    Map map = new HashMap();
+                    JSONObject map = new JSONObject();
                     map.put("success",true);
                     map.put("data",user);
                     return map;
