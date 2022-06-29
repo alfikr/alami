@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.zalando.problem.ProblemModule;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -25,6 +26,7 @@ public class JacksonConfiguration {
         mapper.registerModule(new JSR310Module());
         mapper.registerModule(new JavaTimeModule());
         mapper.registerModule(new JsonOrgModule());
+        mapper.registerModule(new ProblemModule());
         return mapper;
     }
     @Bean

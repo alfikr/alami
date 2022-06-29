@@ -119,6 +119,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
             UserForgotReachLimitException.class,
             EmailNotRegisteredException.class,
             UserNotActivatedException.class,
+            JumlahTabunganMelebihiGajiException.class,
     InvalidParameterException.class})
     public Mono<ResponseEntity<Problem>> handleBadRequestAlertException(BadRequestAlertException ex, ServerWebExchange request) {
         return create(ex, request, HeaderUtil.createFailureAlert(applicationName, false, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));

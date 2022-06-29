@@ -61,6 +61,7 @@ public class ApiNasabah extends ApiAbstract {
 //
     @PostExecution
     public Mono<JSONObject> createNasabah(){
+        log.info("start create nasabah");
         NasabahVM vm = objectMapper.convertValue(reqData,NasabahVM.class);
         BindingResult errors = new BeanPropertyBindingResult(vm,"NasabahVM");
         validator.validate(vm,errors);
@@ -106,6 +107,15 @@ public class ApiNasabah extends ApiAbstract {
                     return map;
                 }).doOnError(err->{
                     log.error("error insert data",err);
+                });
+    }
+
+    public Mono<JSONObject> test(){
+        return paramUtils.getMapParam()
+                .map(l->{
+                    JSONObject object=new JSONObject();
+                    object.put("data",object);
+                    return object;
                 });
     }
 

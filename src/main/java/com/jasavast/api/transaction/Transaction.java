@@ -44,7 +44,22 @@ public class Transaction extends ApiAbstract {
         if(reqData.getDouble("nominal")<=0){
             return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
         }
-        return paramUtils.getMapParam().zipWith(dbUtils.executeQuery("select * from nasabah",new ArrayList<>()))
+        String validateMoney="select n.id ,n.first_name ,n.last_name, n.gaji ,coalesce (sum(t.nominal),0) as tabungan \n" +
+                "from nasabah n\n" +
+                "left join \"transaction\" t on n.id =t.nasabah_id  \n" +
+                "where n.id=:nasabahId \n" +
+                "and t.posisi ='K' \n" +
+                "and extract (month from t.tanggal) = extract(month from current_timestamp)\n" +
+                "group by n.id , extract (month from t.tanggal)";
+        List<SqlParam> params = new ArrayList<>();
+        params.add(new SqlParam("nasabahId",reqData.getString("nasabahId")));
+        return paramUtils.getMapParam().zipWith(dbUtils.executeQuery(validateMoney,params))
+                .map(t->{
+                    if((reqData.getDouble("nominal")+t.getT2().getDouble("tabungan"))>t.getT2().getDouble("gaji")){
+                        throw new JumlahTabunganMelebihiGajiException();
+                    }
+                    return t;
+                })
                 .flatMap(tuple->{
                     if (tuple.getT2()==null){
                         return Mono.error(new NasabahNotFoundException());
@@ -215,10 +230,11 @@ public class Transaction extends ApiAbstract {
     }
     @PostExecution
     public Mono<JSONObject> getTransactionByDate(){
-        if(reqData.getDouble("nominal")<=0){
-            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
-        }
-        if (LocalDate.parse(req.getString("awal")).isAfter(LocalDate.now()) || LocalDate.parse(req.getString("akhir")).isAfter(LocalDate.now())){
+//        if(reqData.getDouble("nominal")<=0){
+//            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+//        }
+        if (LocalDate.parse(reqData.getString("awal")).isAfter(LocalDate.now()) ||
+                LocalDate.parse(reqData.getString("akhir")).isAfter(LocalDate.now())){
             return Mono.error(new DateIsAfterToDayException());
         }
         List<SqlParam> params=new ArrayList<>();
@@ -245,9 +261,9 @@ public class Transaction extends ApiAbstract {
     }
     @PostExecution
     public Mono<JSONObject> getTransactionByNasabah(){
-        if(reqData.getDouble("nominal")<=0){
-            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
-        }
+//        if(reqData.getDouble("nominal")<=0){
+//            return Mono.error(new InvalidParameterException("Parameter nominal tidak boleh kurang dari sama dengan 0"));
+//        }
         List<SqlParam> params=new ArrayList<>();
         params.add(new SqlParam("nasabahId",reqData.getString("nasabahId")));
         return dbUtils.executeQuery(sqlNasabah,params)

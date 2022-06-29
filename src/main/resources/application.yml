@@ -1,6 +1,7 @@
 spring:
   main:
     web-application-type: reactive
+    lazy-initialization: true
   application:
     name: Aplikasi Test
   config:
