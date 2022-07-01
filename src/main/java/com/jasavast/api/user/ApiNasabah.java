@@ -1,33 +1,28 @@
 package com.jasavast.api.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jasavast.api.enumerasi.NasabahStatus;
 import com.jasavast.api.user.dto.NasabahVM;
 import com.jasavast.api.utils.ParamUtils;
 import com.jasavast.core.annotation.GetExecution;
 import com.jasavast.core.annotation.PostExecution;
-import com.jasavast.core.error.BadRequestAlertException;
 import com.jasavast.core.error.InvalidParameterException;
 import com.jasavast.core.util.DBUtils;
 import com.jasavast.core.util.GenericValidator;
 import com.jasavast.core.util.SqlParam;
 import com.jasavast.service.ApiAbstract;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.text.CaseUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component("apiNasabah")

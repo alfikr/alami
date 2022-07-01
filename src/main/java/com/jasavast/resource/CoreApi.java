@@ -14,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.CorePublisher;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
